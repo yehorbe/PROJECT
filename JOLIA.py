@@ -12,7 +12,7 @@ connection = mariadb.connect(
 print("Connected!")
 
 def get_countries():
-    sql = "SELECT name, iso_country FROM country WHERE continent = EU AND iso_country != 'RU'"""
+    sql = "SELECT name, iso_country FROM country WHERE continent = 'EU' AND iso_country != 'RU'"""
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql)
     result = cursor.fetchall()
