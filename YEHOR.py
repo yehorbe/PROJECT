@@ -29,6 +29,22 @@ def get_goals():
     return result
 
 
+def get_role():
+    all_roles = ['thieve', 'regular', 'police']
+
+    sql = "SELECT DISTINCT role FROM game"
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql)
+    results = cursor.fetchall()
+
+    taken_roles = [row['role'] for row in results]
+
+    available_roles = [r for r in all_roles if r not in taken_roles]
+
+    role = random.choice(available_roles)
+
+    return role
+
 def get_items():
     sql = "SELECT * FROM items;"
     cursor = connection.cursor(dictionary=True)
@@ -37,7 +53,7 @@ def get_items():
     return result
 
 
-def creat_game(start_money, p_name, p_role, cur_country):
+def create_game(start_money, p_name, p_role, cur_country):
     sql = "INSERT INTO game (money, player_name, role, location) VALUES (%s, %s, %s, %s);"
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql, (start_money, p_name, p_role, cur_country))
@@ -134,3 +150,24 @@ def police_action(target_player_id):
         print("That was regular player, you lost!")
         return False
     return False
+
+counter=0
+print('So the game is starting!')
+while counter!=3:
+    player = input('Type your name: ')
+    counter+=1
+
+    game_over = False
+    win = False
+
+    start_country = get_countries()
+
+    current_country = random.choice(start_country)
+    money=0
+
+    p_role=get_role()
+    if p_role=='regular':
+            money+=1000
+    # # create_game(start_money, p_name, p_role, cur_country)
+    game_creation = create_game(money, player, p_role, current_country['iso_country'])
+

@@ -1,10 +1,9 @@
 create database when_pigs_fly;
 use when_pigs_fly;  
 SOURCE C:/Users/yehor/Downloads/flight_simulator_database_script.sql
-SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS game;
-DROP TABLE IF EXISTS goal;
-DROP TABLE IF EXISTS goal_reached;
+DROP TABLE IF EXISTS game
+DROP TABLE IF EXISTS goal
+DROP TABLE IF EXISTS goal_reached
 DROP TABLE IF EXISTS airport;
 
 
@@ -59,7 +58,7 @@ values ('AD', 'cigar'),
 ('BG', 'Rose essential oil'),
 ('BY', 'linen clothing'),
 ('CH', 'high-end watches'),
-('CZ', 'czech crystal'),
+('CZ', 'czech crystal'),e4
 ('DE', 'dark beer'),
 ('DK', 'royal porcelain'),
 ('EE', 'amber jewelry'),
@@ -99,6 +98,4 @@ values ('AD', 'cigar'),
 ('SM', 'cheese'),
 ('UA', 'cherry liqueur'),
 ('VA', 'holy grail'),
-
 ('XK', 'stringed instrument');
-
