@@ -1,49 +1,101 @@
-Country: Andorra, code: AD, item: cigar, Number: 1
-Country: Albania, code: AL, item: handmade carpets, Number: 2
-Country: Austria, code: AT, item: mozartkugel, Number: 3
-Country: Bosnia and Herzegovina, code: BA, item: copper coffee set, Number: 4
-Country: Belgium, code: BE, item: handmade chocolate, Number: 5
-Country: Bulgaria, code: BG, item: Rose essential oil, Number: 6
-Country: Belarus, code: BY, item:linen clothing, Number: 7
-Country: Switzerland, code: CH, item: high-end watches, Number: 8
-Country: Czech Republic, code: CZ, item: czech crystal, Number: 9
-Country: Germany, code: DE, item: dark beer, Number: 10
-Country: Denmark, code: DK, item: royal porcelain, Number: 11
-Country: Estonia, code: EE, item: amber jewelry, Number: 12
-Country: Spain, code: ES,item: Iberian ham, Number: 13
-Country: Finland, code: FI, item: Moomin doll Number: 14
-Country: Faroe Islands, code: FO, item: dried fish Number: 15
-Country: France, code: FR, item: High-end skincare products, Number: 16
-Country: United Kingdom, code: GB, item: Bone China Tea Sets, Number: 17
-Country: Guernsey, code: GG, item: abalone, Number: 18
-Country: Gibraltar, code: GI, item: olive oil, Number: 19
-Country: Greece, code: GR, item: handmade leather sandals, Number: 20
-Country: Croatia, code: HR, item: red coral jewelry, Number: 21
-Country: Hungary, code: HU, item: Fruit Brandy, Number: 22
-Country: Ireland, code: IE, item: Irish whiskey, Number: 23
-Country: Isle of Man, code: IM, item: Queen Scallop, Number: 24
-Country: Iceland, code: IS, item: handmade candles, Number: 25
-Country: Italy, code: IT, item: handmade leather bags, Number: 26
-Country: Jersey, code: JE, item: black butter, Number: 27
-Country: Liechtenstein, code: LI, item: commemorative stamps, Number: 28
-Country: Lithuania, code: LT, item: Wood carving, Number: 29
-Country: Luxembourg, code: LU, item: grape wine, Number: 30
-Country: Latvia, code: LV, item: black balsam, Number: 31
-Country: Monaco, code: MC, item: monaco essential oil Number: 32
-Country: Moldova, code: MD, item: golden millet Number: 33
-Country: Montenegro, code: ME, item: truffle sauce Number: 34
-Country: North Macedonia, code: MK, item: Hand-painted porcelain tiles, Number: 35
-Country: Malta, code: MT, item: malta knights statue, Number: 36
-Country: Netherlands, code: NL, item: wooden shoes, Number: 37
-Country: Norway, code: NO, item: deep-sea fish oil,  Number: 38
-Country: Poland, code: PL, item: kabanos, Number: 39
-Country: Portugal, code: PT, item: royal Soap, Number: 40
-Country: Romania, code: RO, item: pipe, Number: 41
-Country: Serbia, code: RS, item: honey Number: 42
-Country: Sweden, code: SE, item: handmade silver jewelry， Number: 43
-Country: Slovenia, code: SI, item: Idrija Lace, Number: 44
-Country: Slovakia, code: SK, item: herbal bitter wine, Number: 45
-Country: San Marino, code: SM, item: cheese, Number: 46
-Country: Ukraine, code: UA, item: Vodka, Number: 47
-Country: Vatican City, code: VA, item: holy grail, Number: 48
-Country: Kosovo, code: XK, item: stringed instrument Number: 49
+create database when_pigs_fly;
+use when_pigs_fly;  
+SOURCE C:/Users/yehor/Downloads/flight_simulator_database_script.sql
+DROP TABLE IF EXISTS game
+DROP TABLE IF EXISTS goal
+DROP TABLE IF EXISTS goal_reached
+DROP TABLE IF EXISTS airport;
+
+
+CREATE TABLE items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(40) NULL,
+    origin VARCHAR(40),
+    CONSTRAINT fk_origin 
+        FOREIGN KEY (origin) 
+        REFERENCES country(iso_country)
+)CHARSET=latin1;
+
+
+CREATE TABLE game (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    player_name VARCHAR(40) NULL,
+    role VARCHAR(40),
+	money int,
+	location VARCHAR(40),
+    CONSTRAINT fk_location
+        FOREIGN KEY (location) 
+        REFERENCES country(iso_country)
+)CHARSET=latin1;
+
+CREATE TABLE player_inventory (
+    game_id INT NOT NULL,
+    item_id INT NOT NULL,
+    FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
+);
+
+CREATE TABLE goal (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(40),
+    decription VARCHAR(200),
+	salary_goal INT,
+    salary_text VARCHAR(40),
+	target VARCHAR(40)
+)CHARSET=latin1;
+
+insert into goal (name, decription, salary_goal, salary_text, target)
+values  ('EARN', 'The amount player have to earn by selling items in different countries', 5000, 'The max value', 'Euros'),
+('Steal', 'The amount thieve have to steal by taking items from other players and selling in different countries', 1000, 'The max value', 'Euros'),
+('Catch', 'Police have to catch thieves', 0, 'NO max or min value', 'Catch thieves');
+
+insert into items (origin, name)
+values ('AD', 'cigar'),
+('AL', 'handmade carpets'),
+('AT', 'mozartkugel'),
+('BA', 'copper coffee set'),
+('BE', 'handmade chocolate'),
+('BG', 'Rose essential oil'),
+('BY', 'linen clothing'),
+('CH', 'high-end watches'),
+('CZ', 'czech crystal'),e4
+('DE', 'dark beer'),
+('DK', 'royal porcelain'),
+('EE', 'amber jewelry'),
+('ES', 'Iberian ham'),
+('FI', 'Moomin doll'),
+('FO', 'dried fish'),
+('FR', 'High-end skincare products'),
+('GB', 'Bone China Tea Set'),
+('GG', 'abalone'),
+('GI', 'olive oil'),
+('GR', 'handmade leather sandals'),
+('HR', 'red coral jewelry'),
+('HU', 'Fruit Brandy'),
+('IE', 'Irish whiskey'),
+('IM', 'Queen Scallop'),
+('IS', 'handmade candles'),
+('IT', 'handmade leather bags'),
+('JE', 'black butter'),
+('LI', 'commemorative stamps'),
+('LT', 'Wood carving'),
+('LU', 'grape wine'),
+('LV', 'black balsam'),
+('MC', 'monaco essential oil'),
+('MD', 'golden millet'),
+('ME', 'truffle sauce'),
+('MK', 'Hand-painted porcelain tiles'),
+('MT', 'malta knights statue'),
+('NL', 'wooden shoes'),
+('NO', 'deep-sea fish oil'),
+('PL', 'kabanos'),
+('PT', 'royal Soap'),
+('RO', 'pipe'),
+('RS', 'honey'),
+('SE', 'handmade silver jewelry'),
+('SI', 'Idrija Lace'),
+('SK', 'herbal bitter wine'),
+('SM', 'cheese'),
+('UA', 'cherry liqueur'),
+('VA', 'holy grail'),
+('XK', 'stringed instrument');
