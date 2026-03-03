@@ -103,7 +103,6 @@ def buy_item(game_id, item_id, item_price):
         return False
 
 
-
 def sell_item(game_id, item_id, item_price):
     sql_delete = "DELETE FROM player_inventory WHERE game_id = %s AND item_id = %s LIMIT 1"
     cursor = connection.cursor(dictionary=True)
@@ -117,7 +116,6 @@ def sell_item(game_id, item_id, item_price):
     else:
         print("You do not have that item.")
         return False
-
 
 
 def get_players_thief(thief_id, target_player_id):
@@ -207,14 +205,14 @@ while counter!=3:
     game_creation = create_game(money, player, p_role, current_country['iso_country'])
 
 while not game_over:
-    sql_name = "SELECT player_name FROM game ORDER BY RAND() LIMIT 1"
+    sql_name = "SELECT player_name FROM game where role = 'thief'"
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql_name)
     result = cursor.fetchone()
 
     if result:
         name = result['player_name']
-        print("-" * 30)
+        print("-" * 50)
         print(f"Pass the computer to the {name}!")
 
         sql_role = "SELECT id, role, location FROM game WHERE player_name = %s"
@@ -223,15 +221,14 @@ while not game_over:
 
         if result_2:
             role=result_2['role']
-            if role=='regular':
-                print('So you are regular player!')
 
-            elif role == 'thief':
+            if role == 'thief':
                 turn_active = True
-                print("--- THIEF MENU ---")
-                command_thief = input("Choose: [sell], [steal], [check], [visit] or [exit] to end turn: ")
+                while turn_active:
+                    print("--- THIEF MENU ---")
+                    command_thief = input("Choose: [sell], [steal], [check], [visit] or [exit] to end turn: ")
 
-                if command_thief == 'sell':
+                    if command_thief == 'sell':
                         thief_id = result_2['id']
                         my_items = show_inventory(thief_id)
                         if not my_items:
@@ -247,35 +244,28 @@ while not game_over:
                             else:
                                 print("Sale cancelled. Choose another action.")
                                 print("~ ~ " * 13)
+                    elif command_thief == 'exit':
+                        turn_active = False
 
-                elif command_thief == 'exit':
-                    turn_active = False
-
-                elif command_thief=='visit':
+                    elif command_thief=='visit':
                         thief_id = result_2['id']
                         dest_country=input("Enter the code of the country you want to visit:")
                         traveling(dest_country, thief_id)
                         print("Have a nice trip!")
                         turn_active = False
 
-                elif command_thief=='check':
+                    elif command_thief=='check':
                         thief_id = result_2['id']
                         print(f"Your ID is {thief_id}")
                         target_id=input("Enter the ID of the player you want to steal items from: ")
                         location_result=get_players_thief(thief_id, target_id)
                         print("~ ~ " * 13)
 
-                elif command_thief == 'steal':
+                    elif command_thief == 'steal':
                         thief_id = result_2['id']
                         print(f"Your ID is {thief_id}")
                         target_id = input("Enter the ID of the player you want to steal items from: ")
                         steal_item(thief_id, target_id)
                         turn_active = False
-
-
-
-            elif role=='police':
-                print('So you are police!')
-            command1=input("Enter the next command: ")
 
 
