@@ -11,6 +11,7 @@ connection = mariadb.connect(
 )
 print("Connected!")
 
+# select 49 airports for the game
 def get_countries():
     sql = "SELECT name, iso_country FROM country WHERE continent = 'EU' AND iso_country != 'RU'"""
     cursor = connection.cursor(dictionary=True)
@@ -18,6 +19,7 @@ def get_countries():
     result = cursor.fetchall()
     return result
 
+# get all goals
 def get_goals():
     sql = "SELECT * FROM goal;"
     cursor = connection.cursor(dictionary=True)
@@ -25,6 +27,7 @@ def get_goals():
     result = cursor.fetchall()
     return result
 
+# get all items
 def get_items():
     sql = "SELECT * FROM items;"
     cursor = connection.cursor(dictionary=True)
@@ -32,6 +35,7 @@ def get_items():
     result = cursor.fetchall()
     return result
 
+# create new game
 def creat_game(start_money, p_name, p_role, cur_country):
     sql = "INSERT INTO game (money, player_name, role, location) VALUES (%s, %s, %s, %s)";
     cursor = connection.cursor(dictionary=True)
