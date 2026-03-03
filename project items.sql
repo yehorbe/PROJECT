@@ -59,7 +59,7 @@ values ('AD', 'cigar'),
 ('BG', 'Rose essential oil'),
 ('BY', 'linen clothing'),
 ('CH', 'high-end watches'),
-('CZ', 'czech crystal'),e4
+('CZ', 'czech crystal'),
 ('DE', 'dark beer'),
 ('DK', 'royal porcelain'),
 ('EE', 'amber jewelry'),
@@ -101,3 +101,4 @@ values ('AD', 'cigar'),
 ('VA', 'holy grail'),
 
 ('XK', 'stringed instrument');
+
