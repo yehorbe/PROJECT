@@ -20,6 +20,12 @@ def get_countries():
     result = cursor.fetchall()
     return result
 
+def show_inventory(game_id):
+    sql_items = 'SELECT game_id, item_id from player_inventory where game_id = %s'
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql_items, (game_id,))
+    result = cursor.fetchall()
+    return result
 
 def get_goals():
     sql = "SELECT * FROM goal;"
@@ -28,21 +34,18 @@ def get_goals():
     result = cursor.fetchall()
     return result
 
+def traveling(location):
+
 
 def get_role():
     all_roles = ['thieve', 'regular', 'police']
-
     sql = "SELECT DISTINCT role FROM game"
     cursor = connection.cursor(dictionary=True)
     cursor.execute(sql)
     results = cursor.fetchall()
-
     taken_roles = [row['role'] for row in results]
-
     available_roles = [r for r in all_roles if r not in taken_roles]
-
     role = random.choice(available_roles)
-
     return role
 
 def get_items():
@@ -83,7 +86,7 @@ def buy_item(game_id, item_id, item_price):
     cursor.execute(sql_check, (game_id,))
     player = cursor.fetchone()
 
-    if player['role'] == 'thieves':
+    if player['role'] == 'thieve':
         print("Thieves cannot buy items!")
         return False
 
@@ -151,14 +154,24 @@ def police_action(target_player_id):
         return False
     return False
 
+
+# THE CORE GAME CODE
+
+cursor = connection.cursor()
+cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
+cursor.execute("DELETE FROM game;")
+cursor.execute("DELETE FROM player_inventory;")
+cursor.execute("ALTER TABLE game AUTO_INCREMENT = 1;")
+cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
+
+game_over = False
+win = False
 counter=0
+
 print('So the game is starting!')
 while counter!=3:
     player = input('Type your name: ')
     counter+=1
-
-    game_over = False
-    win = False
 
     start_country = get_countries()
 
@@ -170,4 +183,56 @@ while counter!=3:
             money+=1000
     # # create_game(start_money, p_name, p_role, cur_country)
     game_creation = create_game(money, player, p_role, current_country['iso_country'])
+
+while not game_over:
+    sql_name = "SELECT player_name FROM game ORDER BY RAND() LIMIT 1"
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(sql_name)
+    result = cursor.fetchone()
+
+    if result:
+        name = result['player_name']
+        print("-" * 30)
+        print(f"Pass the computer to the {name}")
+
+        sql_role = "SELECT id, role FROM game WHERE player_name = %s"
+        cursor.execute(sql_role, (name,))
+        result_2 = cursor.fetchone()
+
+        if result_2:
+            role=result_2['role']
+            if role=='regular':
+                print('So you are regular player!')
+
+            elif role == 'thieve':
+                turn_active = True
+                while turn_active:
+                    print("--- THIEF MENU ---")
+                    command_thieves = input("Choose: [sell], [steal], [visit] or [exit] to end turn: ")
+                    if command_thieves == 'sell':
+                        thieve_id = result_2['id']
+                        my_items = show_inventory(thieve_id)
+                        if not my_items:
+                            print("Your inventory is empty!")
+                        else:
+                            print(f"Items: {[item['item_id'] for item in my_items]}")
+                            selling_item = input("Item ID to sell: ")
+                            price = random.randint(100, 300)
+                            answer = input(f"Sell for {price}? (Y/N): ")
+                            if answer == 'Y':
+                                sell_item(thieve_id, selling_item, price)
+                                turn_active = False
+                            else:
+                                print("Sale cancelled. Choose another action.")
+                    elif command_thieves == 'exit':
+                        turn_active = False
+
+                    if command_thieves=='visit':
+
+
+            elif role=='police':
+                print('So you are police!')
+                game_over = True
+            command1=input("Enter the next command: ")
+
 
