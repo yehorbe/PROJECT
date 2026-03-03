@@ -1,9 +1,10 @@
 create database when_pigs_fly;
 use when_pigs_fly;  
 SOURCE C:/Users/yehor/Downloads/flight_simulator_database_script.sql
-DROP TABLE IF EXISTS game
-DROP TABLE IF EXISTS goal
-DROP TABLE IF EXISTS goal_reached
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS game;
+DROP TABLE IF EXISTS goal;
+DROP TABLE IF EXISTS goal_reached;
 DROP TABLE IF EXISTS airport;
 
 
@@ -98,4 +99,5 @@ values ('AD', 'cigar'),
 ('SM', 'cheese'),
 ('UA', 'cherry liqueur'),
 ('VA', 'holy grail'),
+
 ('XK', 'stringed instrument');
