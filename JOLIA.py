@@ -1,50 +1,72 @@
-import mariadb
-import random
-print(mariadb.__version__)
-connection = mariadb.connect(
-    host = "127.0.0.1",
-    port = 3306,
-    user = "root",
-    password = "150102",
-    database = "when_pigs_fly",
-    autocommit = True
-)
-print("Connected!")
+if role == 'regular' :
 
-def get_countries():
-    sql = "SELECT name, iso_country FROM country WHERE continent = 'EU' AND iso_country != 'RU'"""
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    return result
+    turn_active = True
+    print("--- MERCHANT MENU ---")
 
-def get_goals():
-    sql = "SELECT * FROM goal;"
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    return result
+    while turn_active:
+        regular_id = result_2 ['id']
+        current_location = result_2 ['location']
 
-def get_items():
-    sql = "SELECT * FROM items;"
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    return result
+        command_regular = input("Choose: [buy], [sell], [inventory], [visit] or [exit] to end turn: ")
 
-def creat_game(start_money, p_name, p_role, cur_country):
-    sql = "INSERT INTO game (money, player_name, role, location) VALUES (%s, %s, %s, %s)";
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute(sql, (p_name, p_role, start_money, cur_country,))
-    game_id = cursor.lastrowid
-    goals = get_goals()
-    goal_list = []
-    for goal in goals:
-        for i in range(0, goal['probability'], 1):
-            goal_list.append(goal['id'])
 
-    for i, goal_id in enumerate(goal_list):
-        sql = "INSERT INTO ports (game, airport, goal) VALUES (%s, %s, %s);"
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute(sql, (g_id, g_ports[i]['ident'], goal_id))
-    return game_id
+        if command_regular=='buy':
+            print(f"Yor are currently in {current_location}")
+
+            sql= "SELECT id,name FROM items WHERE origin = %s"
+            cursor.execute(sql,(location,))
+            available_items=cursor.fetchall()
+            print("Items available here:")
+
+            for item in available_items:
+                print(f"Item ID: {item['id']} | Name: {item['name']}")
+
+            item_id=input("Enter item ID you want to buy: ")
+            price = random.randint(100,300)
+            answer= input(f"Do you want to buy it for {price} euros? (Y/N): ")
+
+            if answer == 'Y':
+                buy_item(regular_id, item_id, price)
+                turn_active = False
+
+            else:
+                print("Purchase cancelled. Choose another action.")
+                print("~ ~ " * 13)
+
+
+
+        elif command_regular == 'sell' :
+
+            my_items = show_inventory(regular_id)
+
+            if not my_items:
+                print("Your inventory is empty!")
+            else:
+                print(f"Items: {[item for item in my_items]}")
+                selling_item = input("Item ID to sell: ")
+                price = random.randint(100, 300)
+                answer = input(f"Sell for {price}? (Y/N): ")
+                if answer == 'Y':
+                    sell_item(thief_id, selling_item, price)
+                    turn_active = False
+                else:
+                    print("Sale cancelled. Choose another action.")
+                    print("~ ~ " * 13)
+
+        elif command_regular == 'inventory':
+
+            items = show_inventory(regular_id)
+
+            print(items)
+
+
+        elif command_regular == 'visit':
+
+            dest_country = input("Enter the code of the country you want to visit: ")
+            traveling(dest_country, regular_id)
+            print("Have a nice trip!")
+            turn_active = False
+
+        elif command_regular == 'exit':
+
+            turn_active = False
