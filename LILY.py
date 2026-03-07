@@ -73,6 +73,7 @@ def get_role():
     role = random.choice(available_roles)
     return role
 
+#add
 def check_role(id_role):
     sql = "SELECT role FROM game WHERE id = %s"
     cursor = connection.cursor(dictionary=True)
@@ -164,6 +165,7 @@ def get_players_thief(thief_id, target_player_id):
         print("One of the players was not found in the database.")
         return False
 
+#add
 def get_police_thief(police_id, thief_id):
     sql_locations = "SELECT id, location FROM game WHERE id IN (%s, %s)"
     cursor = connection.cursor(dictionary=True)
@@ -267,13 +269,13 @@ while not game_over:
 
         if result_2:
             role=result_2['role']
-            show_all_positions()
+            show_all_positions() #add
             if role=='regular':
                 print('So you are regular player!')
 
             elif role == 'thief':
                 turn_active = True
-                show_all_positions()
+                show_all_positions() #add
                 print("--- THIEF MENU ---")
                 command_thief = input("Choose: [sell], [steal], [check], [visit] or [exit] to end turn: ")
 
@@ -321,7 +323,7 @@ while not game_over:
 
 
             elif role=='police':
-                show_all_positions()
+                show_all_positions() #add
                 print('So you are police!')
                 print("--- POLICE MENU ---")
                 command_police = input("Choose: [check], [catch], [visit] or [exit] to end turn: ")
