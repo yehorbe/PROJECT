@@ -1,3 +1,17 @@
+import random
+import mariadb
+print(mariadb.__version__)
+connection = mariadb.connect(
+    host="127.0.0.1",
+    port=3306,
+    user="root",
+    password="A9deazwe",
+    database="when_pigs_fly",
+    autocommit=True
+)
+print("Connected.")
+
+
 def get_countries():
     sql = "SELECT name, iso_country FROM country WHERE continent = 'EU' AND iso_country != 'RU'"
     cursor = connection.cursor(dictionary=True)
@@ -253,11 +267,13 @@ while not game_over:
 
         if result_2:
             role=result_2['role']
+            show_all_positions()
             if role=='regular':
                 print('So you are regular player!')
 
             elif role == 'thief':
                 turn_active = True
+                show_all_positions()
                 print("--- THIEF MENU ---")
                 command_thief = input("Choose: [sell], [steal], [check], [visit] or [exit] to end turn: ")
 
@@ -327,13 +343,13 @@ while not game_over:
                     target_player_id1 = input("Enter the ID of the player you want to catch: ")
                     if get_police_thief(police_id, target_player_id1):
                         if police_action(target_player_id1):
-                            print("==" * 40)
+                            print("--" * 40)
                             print("Success! You caught the thief!")
                             game_over = True
                             win = True
                             print("Game Over - Police Wins!")
                         else:
-                            print("==" * 40)
+                            print("--" * 40)
                             print("Failure! That was a regular player!")
                             game_over = True
                             win = False
@@ -352,3 +368,4 @@ while not game_over:
 
                 elif command_police == 'exit':
                     turn_active = False
+
