@@ -42,7 +42,7 @@ def traveling(location, p_id):
     cursor.execute(sql, (location, p_id))
     return True
 
-
+#add
 def show_all_positions():
     sql = "SELECT id, player_name, role, location FROM game ORDER BY id"
     cursor = connection.cursor(dictionary=True)
